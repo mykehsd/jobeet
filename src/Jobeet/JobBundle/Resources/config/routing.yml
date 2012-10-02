@@ -1,0 +1,8 @@
+jobeet_job_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: JobeetJobBundle:Default:index }
+
+JobeetJobBundle_job:
+    resource: "@JobeetJobBundle/Resources/config/routing/job.yml"
+    prefix:   /job
+

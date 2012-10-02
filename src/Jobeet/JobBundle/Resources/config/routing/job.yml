@@ -1,0 +1,30 @@
+job:
+    pattern:  /
+    defaults: { _controller: "JobeetJobBundle:Job:index" }
+
+job_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "JobeetJobBundle:Job:show" }
+
+job_new:
+    pattern:  /new
+    defaults: { _controller: "JobeetJobBundle:Job:new" }
+
+job_create:
+    pattern:  /create
+    defaults: { _controller: "JobeetJobBundle:Job:create" }
+    requirements: { _method: post }
+
+job_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "JobeetJobBundle:Job:edit" }
+
+job_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "JobeetJobBundle:Job:update" }
+    requirements: { _method: post }
+
+job_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "JobeetJobBundle:Job:delete" }
+    requirements: { _method: post }
