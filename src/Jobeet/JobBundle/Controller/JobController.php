@@ -33,7 +33,7 @@ class JobController extends Controller
      * Finds and displays a Job entity.
      *
      */
-    public function showAction($id)
+    public function showAction($company, $location, $id, $position)
     {
         $em = $this->getDoctrine()->getManager();
 

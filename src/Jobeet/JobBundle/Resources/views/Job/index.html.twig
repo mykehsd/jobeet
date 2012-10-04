@@ -10,7 +10,7 @@
         <tr>
             <td>{{ entity.location }}</td>
             <td>{{ entity.position }}</td>
-            <td><a href="{{ path('job_show', { 'id': entity.id }) }}">{{ entity.company }}</a></td>
+            <td><a href="{{ path('job_show', { 'company': entity.company, 'position': entity.position, 'location': entity.location, 'id': entity.id }) }}">{{ entity.company }}</a></td>
         </tr>
     {% endfor %}
     </tbody>
