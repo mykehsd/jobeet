@@ -1,13 +1,35 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        {% block head %}
+            <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet">
+            <title>{% block title %}{% endblock %} - Jobeet </title>
+        {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        <div class="navbar">
+            <div class="navbar-inner">
+                <a class="brand" href="#">Jobeet</a>
+                <ul class="nav">
+                    <li><a href="{{ path('job') }}">Show Jobs</a></li>
+                    <li><a href="{{ path('job_new') }}">Post a Job</a></li>
+                </ul>
+
+                <form class="navbar-search pull-left">
+                    <input type="text" class="search-query" placeholder="Enter some keywords (city, country, position, ...)">
+                </form>
+            </div>
+        </div>
+        <div id="container">{% block body %}{% endblock %}</div>
+        <div id="footer">
+            <div class="navbar navbar-fixed-bottom">
+
+            {% block footer %}
+                <a class="brand" href="#">&copy; Copyright 2012 by Jobeet.org</a>
+            {% endblock %}
+
+            </div>
+        </div>
     </body>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/js/bootstrap.min.js"></script>
 </html>

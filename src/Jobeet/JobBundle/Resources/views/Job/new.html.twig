@@ -1,3 +1,7 @@
+{% extends '::base.html.twig' %}
+{% block title %}View all{% endblock %}
+
+{% block body %}
 <h1>Job creation</h1>
 
 <form action="{{ path('job_create') }}" method="post" {{ form_enctype(form) }}>
@@ -14,3 +18,4 @@
         </a>
     </li>
 </ul>
+{% endblock %}
