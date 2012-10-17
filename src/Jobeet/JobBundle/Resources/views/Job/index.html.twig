@@ -4,9 +4,11 @@
 {% block body %}
 <h1>Job list</h1>
 
+{% for category in categories %}
+<h2>{{ category.name }}</h2>
+	{% for entity in category.active_jobs %}
 <table class="records_list table table-striped table-bordered table-hover">
     <tbody>
-    {% for entity in entities %}
         <tr>
             <td>{{ entity.location }}</td>
             <td>{{ entity.position }}</td>
@@ -15,5 +17,6 @@
     {% endfor %}
     </tbody>
 </table>
+{% endfor %}
 
 {% endblock %}

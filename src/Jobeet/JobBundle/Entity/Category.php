@@ -3,6 +3,8 @@
 namespace Jobeet\JobBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Jobeet\JobBundle\Entity\Job as Job;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Jobeet\JobBundle\Entity\Category
@@ -28,6 +30,15 @@ class Category
      */
     private $name;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Job", mappedBy="category")
+     */
+    private $jobs;
+
+    public function __construct()
+    {
+        $this->jobs = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -70,4 +81,24 @@ class Category
     {
         return $this->getName();
     }
+
+    /**
+     * getJobs
+     * @return array
+     */
+    public function getJobs()
+    {
+        return $this->jobs;
+    }
+
+    public function getActiveJobs()
+    {
+        $q = Doctrine_Query::create()
+        ->from('JobeetJob j')
+        ->where('j.category_id = :category')
+        ->setParameter('category', $this->getId());
+
+        return Doctrine::getTable('JobeetJob')->getActiveJobs($q);            
+    }
+
 }

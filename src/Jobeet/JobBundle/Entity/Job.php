@@ -10,6 +10,7 @@ use Jobeet\JobBundle\Entity\Category;
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  */
 class Job
 {
@@ -118,6 +119,20 @@ class Job
      * @ORM\Column(name="expires_at", type="datetime", nullable=false)
      */
     private $expires_at;
+
+    /**
+     * @var timestamp $created_at
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     */
+    private $created_at;
+
+    /**
+     * @var timestamp $updated_at
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
+     */
+    private $updated_at;
 
 
     /**
@@ -448,4 +463,35 @@ class Job
     {
         return $this->category;
     }        
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+          $this->created_at = new \DateTime();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     * @ORM\PrePersist
+     */
+    public function setUpdateAtValue()
+    {
+        $this->updated_at = new \DateTime();
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setExpiresAtValue()
+    {
+        if ($this->expires_at === null) {
+            $expires = new \DateTime();
+	    $expires->add(new \DateInterval('P30D'));
+            $this->expires_at = $expires;
+        }
+
+	return $this;
+    }
 }

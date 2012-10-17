@@ -24,5 +24,8 @@ class JobeetJobExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        $container->setParameter('jobeet_job.default_active_days', $config['active_days']);
+        $container->setParameter('jobeet_job.max_jobs_on_homepage', $config['max_jobs_on_homepage']);
     }
 }

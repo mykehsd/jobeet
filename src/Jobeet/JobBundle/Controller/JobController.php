@@ -20,12 +20,17 @@ class JobController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('JobeetJobBundle:Job')->findAll();
+        $categories = array();
+        foreach ($this->get('jobeet_job.job_manager')->getCategoriesWithJobs() as $category)
+        {
+            $categories[] = array (
+                'name' => $category->getName(),
+                'active_jobs' => $this->get('jobeet_job.job_manager')->getActiveJobs ( $category, $this->container->getParameter('jobeet_job.max_jobs_on_homepage') )
+            );
+        }
 
         return $this->render('JobeetJobBundle:Job:index.html.twig', array(
-            'entities' => $entities,
+            'categories' => $categories
         ));
     }
 
@@ -35,9 +40,7 @@ class JobController extends Controller
      */
     public function showAction($company, $location, $id, $position)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('JobeetJobBundle:Job')->find($id);
+        $entity = $this->get('jobeet_job.job_manager')->findActiveJob($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Job entity.');
@@ -56,7 +59,7 @@ class JobController extends Controller
      */
     public function newAction()
     {
-        $entity = new Job();
+        $entity = $this->get('jobeet_job.job_manager')->createJob();
         $form   = $this->createForm(new JobType(), $entity);
 
         return $this->render('JobeetJobBundle:Job:new.html.twig', array(
@@ -71,14 +74,13 @@ class JobController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity  = new Job();
+        $entity = $this->get('jobeet_job.job_manager')->createJob();
         $form = $this->createForm(new JobType(), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
+            $this->get('jobeet_job.job_manager')->persist($entity);
+            $this->get('jobeet_job.job_manager')->flush();
 
             return $this->redirect($this->generateUrl('job_show', array('id' => $entity->getId())));
         }
@@ -95,9 +97,7 @@ class JobController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('JobeetJobBundle:Job')->find($id);
+        $entity = $this->get('jobeet_job.job_manager')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Job entity.');
@@ -119,9 +119,7 @@ class JobController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('JobeetJobBundle:Job')->find($id);
+        $entity = $this->get('jobeet_job.job_manager')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Job entity.');
@@ -132,8 +130,8 @@ class JobController extends Controller
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
-            $em->persist($entity);
-            $em->flush();
+            $this->get('jobeet_job.job_manager')->persist($entity);
+            $this->get('jobeet_job.job_manager')->flush();
 
             return $this->redirect($this->generateUrl('job_edit', array('id' => $id)));
         }
@@ -155,15 +153,14 @@ class JobController extends Controller
         $form->bind($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('JobeetJobBundle:Job')->find($id);
+            $entity = $this->get('jobeet_job.job_manager')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Job entity.');
             }
 
-            $em->remove($entity);
-            $em->flush();
+            $this->get('jobeet_job.job_manager')>remove($entity);
+            $this->get('jobeet_job.job_manager')->flush();
         }
 
         return $this->redirect($this->generateUrl('job'));

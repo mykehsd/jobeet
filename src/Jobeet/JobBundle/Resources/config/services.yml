@@ -1,7 +1,7 @@
 parameters:
-#    jobeet_job.example.class: Jobeet\JobBundle\Example
+  jobeet_job.jobManager.class: Jobeet\JobBundle\Model\JobManager
 
 services:
-#    jobeet_job.example:
-#        class: %jobeet_job.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+  jobeet_job.job_manager:
+    class: %jobeet_job.jobManager.class%
+    arguments: [ @doctrine.orm.entity_manager, %jobeet_job.default_active_days% ]
