@@ -11,15 +11,17 @@ class JobManager
 	// The default length of time jobs will remain active
 	private $active_days;
 
+	private $paginator;
 	/** 
 	 * __construct
 	 * @param (object) entityManager 
 	 * @return null
 	 */
-	public function __construct( $entityManager, $active_days )
+	public function __construct( $entityManager, $active_days, $paginator )
 	{
 		$this->em = $entityManager;
 		$this->active_days = (int) $active_days;
+		$this->paginator = $paginator;
 	}
 
 	/**
@@ -45,18 +47,19 @@ class JobManager
 			->setParameters( array( 'id' => $id, 'expires' => new \DateTime()));
 
     	try {
-    		$qb->getQuery()->getSingleResult();
+    		return $qb->getQuery()->getSingleResult();
     	} catch (\Doctrine\Orm\NoResultException $e) {
     		return false;
     	}
     }
+    
 	/** 
 	 * getActiveJobs
 	 * @param Category
 	 * @param int $limit Limit the list of jobs
 	 * @return (array) Enttiy\Job
 	 */
-	public function getActiveJobs( Category $category = null, $limit = null )
+	public function getActiveJobs( Category $category = null, $page = null, $limit = null )
 	{
 		$repository = $this->em->getRepository('JobeetJobBundle:Job');
     	$qb =$repository->createQueryBuilder('j');
@@ -68,29 +71,10 @@ class JobManager
         		->setParameter('id', $category->getId() );
         }
 
-        if (null !== $limit) {
-        	$qb->setMaxResults($limit);
-        }
+        $jobs = $this->paginator->paginate($qb, $page, $limit); 
 
-        return $qb->getQuery()->getResult();
+        return $jobs;
 		
-	}
-
-	/**
-	 * getCategoriesWithJobs
-	 * Returns all categories with at least 1 active job
-	 * @return (array) JobeetJobbundle:Category
-	 */
-	public function getCategoriesWithJobs()
-	{
-		$repository = $this->em->getRepository('JobeetJobBundle:Category');
-		$query = $repository->createQueryBuilder('c')
-			->select (array('c', 'j'))
-			->leftJoin('c.jobs', 'j')
-			->where('j.expires_at > :expires')
-			->setParameter('expires', new \DateTime() )
-			->getQuery();
-		return $query->getResult();
 	}
 
 	/**

@@ -5,18 +5,9 @@
 <h1>Job list</h1>
 
 {% for category in categories %}
-<h2>{{ category.name }}</h2>
-	{% for entity in category.active_jobs %}
-<table class="records_list table table-striped table-bordered table-hover">
-    <tbody>
-        <tr>
-            <td>{{ entity.location }}</td>
-            <td>{{ entity.position }}</td>
-            <td><a href="{{ path('job_show', { 'company': entity.company, 'position': entity.position, 'location': entity.location, 'id': entity.id }) }}">{{ entity.company }}</a></td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<h2><a href="{{ path('category', { 'slug': category.name }) }}">{{ category.name }}</a></h2>
+{% include 'JobeetJobBundle:Job:jobs_list.html.twig' with {'jobs': category.active_jobs} %}
+
 {% endfor %}
 
 {% endblock %}

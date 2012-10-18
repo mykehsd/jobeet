@@ -21,11 +21,11 @@ class JobController extends Controller
     public function indexAction()
     {
         $categories = array();
-        foreach ($this->get('jobeet_job.job_manager')->getCategoriesWithJobs() as $category)
+        foreach ($this->get('jobeet_job.category_manager')->getCategoriesWithJobs() as $category)
         {
             $categories[] = array (
                 'name' => $category->getName(),
-                'active_jobs' => $this->get('jobeet_job.job_manager')->getActiveJobs ( $category, $this->container->getParameter('jobeet_job.max_jobs_on_homepage') )
+                'active_jobs' => $this->get('jobeet_job.job_manager')->getActiveJobs ( $category, 1, $this->container->getParameter('jobeet_job.max_jobs_on_homepage') )
             );
         }
 

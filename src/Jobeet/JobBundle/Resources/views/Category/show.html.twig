@@ -1,0 +1,13 @@
+{% extends '::base.html.twig' %}
+{% block title %}{{category.name}} Jobs{% endblock %}
+
+{% block body %}
+<h1>Jobs in the {{ category.name }} category</h1>
+
+<div class="navigation">
+    {{ jobs.render()|raw }}
+</div>
+
+{% include 'JobeetJobBundle:Job:jobs_list.html.twig' with {'jobs': jobs} %}
+
+{% endblock %}

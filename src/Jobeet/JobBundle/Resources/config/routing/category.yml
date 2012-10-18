@@ -1,0 +1,3 @@
+category:
+    pattern:  /{slug}/{page}
+    defaults: { _controller: "JobeetJobBundle:Category:show", page: 1 }

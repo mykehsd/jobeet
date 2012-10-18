@@ -1,7 +1,12 @@
 parameters:
   jobeet_job.jobManager.class: Jobeet\JobBundle\Model\JobManager
+  jobeet_job.CategoryManager.class: Jobeet\JobBundle\Model\CategoryManager
 
 services:
   jobeet_job.job_manager:
     class: %jobeet_job.jobManager.class%
-    arguments: [ @doctrine.orm.entity_manager, %jobeet_job.default_active_days% ]
+    arguments: [ @doctrine.orm.entity_manager, %jobeet_job.default_active_days%, @knp_paginator ]
+
+  jobeet_job.category_manager:
+    class: %jobeet_job.CategoryManager.class%
+    arguments: [ @doctrine.orm.entity_manager ]
